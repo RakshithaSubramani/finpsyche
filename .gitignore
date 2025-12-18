@@ -1,0 +1,9 @@
+backend/.env
+backend/serviceAccountKey.json
+backend/*.db
+backend/*.pkl
+__pycache__/
+frontend/node_modules/
+frontend/build/
+.DS_Store
+venv/
