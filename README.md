@@ -22,4 +22,3 @@ Sign in with Google → Chat: "I'm worried about market crash" → Detects Fear 
 - RAG: HF embeddings + Pinecone
 - Firebase: Enables personalized, real-time sessions—scalable for 1000s users.
 
-Live Demo: [Add link later]
