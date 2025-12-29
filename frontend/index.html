@@ -3,54 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinPsyche - Financial Personality Chatbot</title>
+    <title>FinPsyche – Financial Personality Chatbot</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>💰 FinPsyche</h1>
-            <p class="subtitle">AI-Powered Financial Personality Analyzer</p>
-        </header>
 
-        <div class="personality-badge" id="personalityBadge" style="display: none;">
-            <span class="badge-label">Detected Personality:</span>
-            <span class="badge-value" id="personalityValue"></span>
-        </div>
+<div class="container">
 
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot-message">
-                    <div class="message-content">
-                        <p>Hello! I'm your financial advisor. Share your financial thoughts, concerns, or questions, and I'll analyze your risk personality and provide personalized advice.</p>
-                    </div>
-                    <div class="message-time">Just now</div>
+    <!-- HEADER -->
+    <header>
+        <h1>💰 FinPsyche</h1>
+        <p class="subtitle">AI-Powered Financial Personality Analyzer</p>
+    </header>
+
+    <!-- PERSONALITY BADGE -->
+    <div class="personality-badge" id="personalityBadge" style="display:none;">
+        <span class="badge-label">Detected Personality:</span>
+        <span class="badge-value" id="personalityValue"></span>
+    </div>
+
+    <!-- CHAT AREA -->
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+
+            <!-- Initial Bot Message -->
+            <div class="message bot-message">
+                <div class="message-content">
+                    <p>
+                        Hello! 👋  
+                        You can type or use the mic to share your financial thoughts.
+                        I’ll analyze your emotion and risk personality and guide you.
+                    </p>
                 </div>
+                <div class="message-time">Now</div>
             </div>
-            
-            <div class="typing-indicator" id="typingIndicator" style="display: none;">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+
         </div>
 
-        <div class="input-container">
-            <input 
-                type="text" 
-                id="messageInput" 
-                placeholder="Share your financial thoughts..."
-                autocomplete="off"
-            >
-            <button id="sendButton" onclick="sendMessage()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-            </button>
+        <!-- TYPING INDICATOR -->
+        <div class="typing-indicator" id="typingIndicator" style="display:none;">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- INPUT AREA -->
+    <div class="input-container">
+
+        <!-- MIC BUTTON -->
+        <button id="micButton" title="Record voice">
+            🎤
+        </button>
+
+        <!-- TEXT INPUT -->
+        <input
+            type="text"
+            id="messageInput"
+            placeholder="Type your financial thoughts or use mic..."
+            autocomplete="off"
+        >
+
+        <!-- SEND BUTTON -->
+        <button id="sendButton" onclick="sendMessage()">
+            ➤
+        </button>
+    </div>
+
+    <!-- RECORDING INDICATOR -->
+    <div id="recordingIndicator" class="recording-indicator" style="display:none;">
+        <div class="recording-pulse"></div>
+        Recording… click mic again to stop
+    </div>
+
+</div>
+
+<!-- JS -->
+<script src="script.js"></script>
 </body>
 </html>

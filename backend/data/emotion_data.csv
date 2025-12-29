@@ -30,3 +30,73 @@ text,label
 "I'm overwhelmed by my debts.",Stress
 "I regret my financial decisions.",Stress
 "I feel anxious about money all the time.",Stress
+"I'm afraid the market will crash tomorrow.",Fear
+"Losing my savings keeps me up at night.",Fear
+"I'm worried about retirement funds.",Fear
+"The volatility scares me away from investing.",Fear
+"Panic selling during crashes is my biggest fear.",Fear
+"I'm terrified of making wrong investment choices.",Fear
+"Market uncertainty makes me anxious.",Fear
+"I fear losing everything I've worked for.",Fear
+"Financial insecurity haunts me daily.",Fear
+"I'm scared to invest because of past losses.",Fear
+"Bills piling up is so stressful.",Stress
+"Financial pressure is crushing me.",Stress
+"I'm drowning in credit card debt.",Stress
+"Money problems are affecting my sleep.",Stress
+"I can't stop worrying about finances.",Stress
+"Budgeting feels impossible right now.",Stress
+"Every expense feels like a burden.",Stress
+"I'm constantly stressed about money.",Stress
+"Financial anxiety is overwhelming.",Stress
+"Managing money feels too difficult.",Stress
+"This investment opportunity is thrilling!",Excitement
+"I'm pumped about crypto gains!",Excitement
+"Stock market gains got me excited!",Excitement
+"Making profits feels amazing!",Excitement
+"I'm thrilled about my portfolio growth!",Excitement
+"Investment returns are exciting!",Excitement
+"This trade opportunity is awesome!",Excitement
+"I'm excited to start investing!",Excitement
+"Financial success feels incredible!",Excitement
+"Winning in markets is exhilarating!",Excitement
+"I trust my investment strategy.",Confidence
+"Bonds provide stable returns I can rely on.",Confidence
+"I'm confident in my financial plan.",Confidence
+"My portfolio strategy feels solid.",Confidence
+"I believe in long-term investing.",Confidence
+"Financial planning gives me confidence.",Confidence
+"I'm sure about my investment choices.",Confidence
+"Steady returns build my confidence.",Confidence
+"I feel secure about my financial future.",Confidence
+"My investment approach is reliable.",Confidence
+"Maybe I should wait before investing.",Hesitation
+"I'm uncertain about this decision.",Hesitation
+"Not sure if this is the right time.",Hesitation
+"I doubt this investment will work.",Hesitation
+"Unsure about market direction.",Hesitation
+"Maybe I should research more first.",Hesitation
+"I'm hesitant to commit to this.",Hesitation
+"Doubts about this financial move.",Hesitation
+"Uncertain if I should invest now.",Hesitation
+"Maybe I'll wait and see first.",Hesitation
+"I'm guaranteed to make huge profits.",Overconfidence
+"This investment can't possibly fail.",Overconfidence
+"I'll definitely become rich from this.",Overconfidence
+"Markets always go up for me.",Overconfidence
+"I know exactly what will happen.",Overconfidence
+"This is a surefire way to wealth.",Overconfidence
+"I can't lose with this strategy.",Overconfidence
+"Success is guaranteed in my plan.",Overconfidence
+"I'm certain I'll beat the market.",Overconfidence
+"This will definitely make me rich.",Overconfidence
+"My finances are stable and peaceful.",Calm
+"Steady investments keep me relaxed.",Calm
+"Financial planning brings me peace.",Calm
+"I feel calm about my money situation.",Calm
+"Balanced approach keeps me at ease.",Calm
+"No financial stress in my life.",Calm
+"Steady growth feels reassuring.",Calm
+"I'm content with my financial progress.",Calm
+"Peaceful approach to money management.",Calm
+"Calm and steady financial journey.",Calm

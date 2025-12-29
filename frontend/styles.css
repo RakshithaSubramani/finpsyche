@@ -202,6 +202,7 @@ header h1 {
     background: white;
     border-top: 1px solid #e5e7eb;
     gap: 10px;
+    align-items: center;
 }
 
 #messageInput {
@@ -239,6 +240,77 @@ header h1 {
 
 #sendButton:active {
     transform: scale(0.95);
+}
+
+#micButton {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: #f3f4f6;
+    color: #667eea;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+#micButton:hover {
+    background: #e5e7eb;
+    transform: scale(1.05);
+}
+
+#micButton.recording {
+    background: #ef4444;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+}
+
+#micButton:active {
+    transform: scale(0.95);
+}
+
+.recording-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: #fee2e2;
+    color: #991b1b;
+    font-size: 0.9em;
+    font-weight: 500;
+    border-top: 1px solid #fecaca;
+}
+
+.recording-pulse {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: recordingPulse 1s infinite;
+}
+
+@keyframes recordingPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
 }
 
 .chat-container::-webkit-scrollbar {

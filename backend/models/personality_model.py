@@ -40,31 +40,86 @@ class PersonalityModel:
                 "Let's go all in on crypto!",
                 "High risk, high reward!",
                 "I'm investing everything in stocks",
-                "YOLO on this trade"
+                "YOLO on this trade",
+                "All or nothing approach works for me",
+                "I love the thrill of high-risk investments",
+                "Crypto is the future, going big!",
+                "Options trading is where the money is",
+                "I'm betting everything on this stock",
+                "High volatility doesn't scare me",
+                "Risky investments are my thing",
+                "I'm all in on meme stocks",
+                "Penny stocks can make me rich",
+                "Leverage trading is exciting",
+                "I chase high returns aggressively"
             ],
             'Risk-Averse': [
                 "Too risky, stick to savings.",
                 "I hate volatility.",
                 "Only safe investments for me",
-                "FDs are safest"
+                "FDs are safest",
+                "I prefer guaranteed returns",
+                "Low risk investments only please",
+                "Safety is my priority",
+                "Fixed deposits give me peace",
+                "I avoid anything volatile",
+                "Stable returns are what I want",
+                "Government bonds are safe",
+                "I can't handle market swings",
+                "Conservative approach works best",
+                "I stick to low-risk options",
+                "Security matters more than returns"
             ],
             'Neutral': [
                 "Balanced portfolio sounds good.",
                 "Moderate growth is fine.",
                 "Diversified approach works",
-                "Steady returns preferred"
+                "Steady returns preferred",
+                "Mix of safe and growth assets",
+                "Diversification is key for me",
+                "Balanced risk and return",
+                "Moderate approach to investing",
+                "Mix of equity and debt",
+                "Steady and balanced strategy",
+                "Not too risky, not too safe",
+                "Diversified portfolio approach",
+                "Balanced investment strategy",
+                "Moderate risk tolerance",
+                "Steady and consistent growth"
             ],
             'Impulsive': [
                 "Buy now before it's too late!",
                 "Impulse buy that stock!",
                 "I need to invest right now",
-                "Quick decision needed"
+                "Quick decision needed",
+                "I can't wait, buying immediately",
+                "FOMO is making me act fast",
+                "I make quick financial decisions",
+                "Impulse purchases are my weakness",
+                "I buy without thinking much",
+                "Quick trades excite me",
+                "I act on financial impulses",
+                "Can't resist buying opportunities",
+                "I make snap investment decisions",
+                "Impulsive spending is my problem",
+                "I act first, think later"
             ],
             'Emotional': [
                 "Money makes me anxious.",
                 "Fear of missing out...",
                 "I'm so worried about losses",
-                "Financial stress is killing me"
+                "Financial stress is killing me",
+                "I panic when markets drop",
+                "Emotions control my investments",
+                "I get emotional about money",
+                "Financial decisions stress me out",
+                "I'm overwhelmed by money choices",
+                "Emotions drive my spending",
+                "I react emotionally to markets",
+                "Financial anxiety controls me",
+                "I make decisions based on feelings",
+                "Money triggers strong emotions",
+                "I'm emotionally attached to investments"
             ]
         }
         

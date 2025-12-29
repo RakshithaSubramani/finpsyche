@@ -17,3 +17,10 @@ faiss-cpu==1.7.4
 vaderSentiment==3.3.2
 joblib==1.4.2
 python-dotenv==1.0.1
+
+# Voice processing libraries (all FREE)
+SpeechRecognition==3.10.4
+pydub==0.25.1
+gTTS==2.5.2
+openai-whisper==20231117
+pyttsx3==2.90

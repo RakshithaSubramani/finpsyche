@@ -1,134 +1,143 @@
-const API_URL = 'http://localhost:5000';
-let userId = Math.floor(Math.random() * 1000000);
+const API_URL = "http://localhost:5000";
 
-// DOM elements
-const chatMessages = document.getElementById('chatMessages');
-const messageInput = document.getElementById('messageInput');
-const sendButton = document.getElementById('sendButton');
-const typingIndicator = document.getElementById('typingIndicator');
-const personalityBadge = document.getElementById('personalityBadge');
-const personalityValue = document.getElementById('personalityValue');
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
 
-console.log(`User ID: ${userId}`);
+const micButton = document.getElementById("micButton");
+const recordingIndicator = document.getElementById("recordingIndicator");
+const chatMessages = document.getElementById("chatMessages");
+const messageInput = document.getElementById("messageInput");
+const typingIndicator = document.getElementById("typingIndicator");
+const personalityBadge = document.getElementById("personalityBadge");
+const personalityValue = document.getElementById("personalityValue");
 
-// Send message function
-async function sendMessage() {
-    const message = messageInput.value.trim();
-    if (!message) return;
+/* ---------------- UI ---------------- */
+function addMessage(text, sender, personality=null, emotion=null) {
+    const div = document.createElement("div");
+    div.className = `message ${sender}-message`;
 
-    // Add user message to chat
-    addMessage(message, 'user');
-    messageInput.value = '';
-    
-    // Show typing indicator
-    showTypingIndicator();
-    
-    try {
-        const response = await fetch(`${API_URL}/chat`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: message,
-                user_id: userId
-            })
-        });
+    div.innerHTML = `
+        <div class="message-content">
+            <p>${text}</p>
+            ${sender === "bot" ? `
+                <div class="message-meta">
+                    ${personality ? `<span class="meta-badge personality-meta">Personality: ${personality}</span>` : ""}
+                    ${emotion ? `<span class="meta-badge emotion-meta">Emotion: ${emotion}</span>` : ""}
+                </div>` : ""}
+        </div>
+        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+    `;
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        // Hide typing indicator
-        hideTypingIndicator();
-        
-        // Add bot response
-        addMessage(data.reply, 'bot', data.personality, data.emotion);
-        
-        // Update personality badge
-        if (data.personality) {
-            updatePersonalityBadge(data.personality);
-        }
-        
-    } catch (error) {
-        hideTypingIndicator();
-        addMessage('Sorry, I encountered an error. Please make sure the backend is running.', 'bot');
-        console.error('Error:', error);
-    }
-}
-
-// Add message to chat
-function addMessage(text, sender, personality = null, emotion = null) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    
-    const textP = document.createElement('p');
-    textP.textContent = text;
-    contentDiv.appendChild(textP);
-    
-    // Add metadata badges for bot messages
-    if (sender === 'bot' && (personality || emotion)) {
-        const metaDiv = document.createElement('div');
-        metaDiv.className = 'message-meta';
-        
-        if (personality) {
-            const personalityBadge = document.createElement('span');
-            personalityBadge.className = 'meta-badge personality-meta';
-            personalityBadge.textContent = `Personality: ${personality}`;
-            metaDiv.appendChild(personalityBadge);
-        }
-        
-        if (emotion) {
-            const emotionBadge = document.createElement('span');
-            emotionBadge.className = 'meta-badge emotion-meta';
-            emotionBadge.textContent = `Emotion: ${emotion}`;
-            metaDiv.appendChild(emotionBadge);
-        }
-        
-        contentDiv.appendChild(metaDiv);
-    }
-    
-    messageDiv.appendChild(contentDiv);
-    
-    const timeDiv = document.createElement('div');
-    timeDiv.className = 'message-time';
-    timeDiv.textContent = new Date().toLocaleTimeString();
-    messageDiv.appendChild(timeDiv);
-    
-    chatMessages.appendChild(messageDiv);
-    
-    // Scroll to bottom
+    chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Show typing indicator
-function showTypingIndicator() {
-    typingIndicator.style.display = 'flex';
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
+function showTyping() { typingIndicator.style.display = "flex"; }
+function hideTyping() { typingIndicator.style.display = "none"; }
 
-// Hide typing indicator
-function hideTypingIndicator() {
-    typingIndicator.style.display = 'none';
-}
-
-// Update personality badge
-function updatePersonalityBadge(personality) {
+function updatePersonality(personality) {
     personalityValue.textContent = personality;
-    personalityBadge.style.display = 'block';
+    personalityBadge.style.display = "block";
 }
 
-// Enter key to send
-messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage();
-    }
+/* ---------------- MIC CONTROL ---------------- */
+micButton.addEventListener("click", async () => {
+    if (!isRecording) startRecording();
+    else stopRecording();
 });
 
-// Focus input on load
-messageInput.focus();
+async function startRecording() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    mediaRecorder = new MediaRecorder(stream, {
+        mimeType: "audio/webm;codecs=opus"
+    });
+
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = e => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
+
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        await sendVoice(audioBlob);
+
+        audioChunks = [];
+        isRecording = false;
+        micButton.classList.remove("recording");
+        recordingIndicator.style.display = "none";
+    };
+
+    mediaRecorder.start();
+    isRecording = true;
+    micButton.classList.add("recording");
+    recordingIndicator.style.display = "flex";
+}
+
+function stopRecording() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+    }
+}
+
+/* ---------------- SEND VOICE ---------------- */
+async function sendVoice(blob) {
+    showTyping();
+    addMessage("🎤 Voice message sent", "user");
+
+    const formData = new FormData();
+    formData.append("audio", blob, "voice.webm");
+
+    const res = await fetch(`${API_URL}/chat/voice`, {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    // Replace placeholder with transcription
+    const lastUser = document.querySelector(".user-message:last-child p");
+    if (lastUser) lastUser.textContent = data.transcribed_message;
+
+    addMessage(data.reply, "bot", data.personality, data.emotion);
+    updatePersonality(data.personality);
+
+    if (data.audio_url) {
+        new Audio(API_URL + data.audio_url).play();
+    }
+}
+
+/* ---------------- TEXT CHAT ---------------- */
+async function sendMessage() {
+    const msg = messageInput.value.trim();
+    if (!msg) return;
+
+    addMessage(msg, "user");
+    messageInput.value = "";
+    showTyping();
+
+    const res = await fetch(`${API_URL}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+    });
+
+    const data = await res.json();
+    hideTyping();
+
+    addMessage(data.reply, "bot", data.personality, data.emotion);
+    updatePersonality(data.personality);
+
+    if (data.audio_url) {
+        new Audio(API_URL + data.audio_url).play();
+    }
+}
+
+messageInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
+});
