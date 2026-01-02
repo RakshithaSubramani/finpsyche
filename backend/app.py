@@ -7,7 +7,7 @@ import pyttsx3
 
 from models.emotion_model import EmotionModel
 from models.personality_model import PersonalityModel
-from db import save_to_db
+from db import save_to_db, get_chat_history
 from rag.rag_engine import setup_rag, retrieve_advice
 
 app = Flask(__name__)
@@ -134,16 +134,107 @@ def generate_response(message, personality, emotion, context, is_casual=False):
         
         return response_text
     else:
-        # Generate financial advice response
-        raw_advice = context[0] if context else 'Invest calmly and diversify.'
+        # Generate personalized financial advice response
+        message_lower = message.lower().strip()
         
-        # Debug: print what we're getting
-        print(f"🔍 Raw advice from context: {raw_advice[:200]}...")
+        # Combine all context for comprehensive advice
+        all_context = ' '.join(context) if context else ''
         
-        financial_advice_text = clean_financial_advice(raw_advice)
+        # Extract key information from user's question
+        is_about_stocks = any(word in message_lower for word in ['stock', 'stocks', 'equity', 'equities', 'invest', 'investment', 'investing'])
+        is_about_savings = any(word in message_lower for word in ['save', 'saving', 'savings', 'money', 'cash'])
+        is_about_debt = any(word in message_lower for word in ['debt', 'loan', 'credit', 'owe', 'borrow'])
+        is_about_budget = any(word in message_lower for word in ['budget', 'spending', 'expense', 'expenses'])
         
-        # Debug: print what we cleaned
-        print(f"🔍 Cleaned advice: {financial_advice_text[:200]}...")
+        # Build personalized response based on question and context
+        response_parts = []
+        
+        # Address the specific question
+        if is_about_stocks:
+            personality_type = personality.get('type', '').lower() if personality else ''
+            emotion_type = emotion.get('emotion', '').lower() if emotion else ''
+            is_stressed = emotion_type in ['stress', 'stressed', 'anxiety', 'anxious', 'fear', 'fearful', 'worry', 'worried']
+            is_risk_taker = 'risk' in personality_type or 'taker' in personality_type
+            
+            if is_risk_taker and is_stressed:
+                # Risk taker but currently stressed - acknowledge stress but leverage risk tolerance
+                response_parts.append("Yes, you can invest in stocks! Even though you're feeling stressed, your risk-taking personality suggests you can handle market volatility.")
+                response_parts.append("However, given your current stress, I'd recommend a structured approach: allocate 70% to diversified stocks (mix of large-cap, mid-cap, and international), 20% to bonds, and 10% to cash reserves.")
+                response_parts.append("Consider index funds or ETFs for broad diversification with lower individual stock risk.")
+                response_parts.append("Start by investing a portion of your money (maybe 30-50% of what you're comfortable investing), and gradually increase as you become more comfortable.")
+                response_parts.append("Remember: only invest money you won't need for at least 5 years, and maintain an emergency fund separate from investments.")
+            elif is_risk_taker:
+                # Risk taker - can handle more aggressive approach but still need structure
+                response_parts.append("Yes, absolutely! As someone comfortable with risk, you can allocate more to stocks while still maintaining balance.")
+                response_parts.append("Consider 70-80% in diversified stocks (mix of large-cap, mid-cap, and international), 15-20% in bonds, and 5-10% cash.")
+                response_parts.append("Diversify across sectors and consider both growth and value stocks.")
+                response_parts.append("Even risk-takers benefit from having an emergency fund and some bonds for stability during market downturns.")
+            elif is_stressed:
+                # User is stressed about stocks - provide calming, structured advice
+                response_parts.append("Yes, you can invest in stocks, but given your current stress level, I'd recommend a more conservative, balanced approach.")
+                response_parts.append("Start with a diversified portfolio: 50-60% stocks, 30-40% bonds, 10% cash reserves.")
+                response_parts.append("Consider index funds or ETFs for lower risk and better diversification.")
+                response_parts.append("Only invest money you won't need for at least 5 years, and start with a smaller percentage of your total savings to reduce stress.")
+                response_parts.append("You can always increase your stock allocation as you become more comfortable with market fluctuations.")
+            else:
+                # Conservative or balanced approach
+                response_parts.append("Yes, you can invest in stocks, and it's a great way to grow your wealth over time.")
+                response_parts.append("Start with a diversified portfolio: consider 50-60% in stocks (via index funds or ETFs), 30-40% in bonds, and 10% in cash.")
+                response_parts.append("Only invest money you can afford to leave invested for 5+ years, as stocks can be volatile in the short term.")
+                response_parts.append("Consider starting with low-cost index funds for broad market exposure with lower risk.")
+            
+            # Add context-based advice if available
+            if all_context:
+                cleaned_context = clean_financial_advice(all_context)
+                if cleaned_context and len(cleaned_context) > 50:
+                    response_parts.append(f"\nAdditional guidance: {cleaned_context[:300]}")
+        
+        elif is_about_savings:
+            response_parts.append("Great that you're thinking about saving and investing!")
+            if all_context:
+                cleaned_context = clean_financial_advice(all_context)
+                if cleaned_context:
+                    response_parts.append(cleaned_context[:400])
+            else:
+                response_parts.append("A good rule is to save 20% of your income. Build an emergency fund first (3-6 months expenses), then invest the rest in a diversified portfolio.")
+        
+        elif is_about_debt:
+            response_parts.append("Managing debt is crucial for financial health.")
+            if all_context:
+                cleaned_context = clean_financial_advice(all_context)
+                if cleaned_context:
+                    response_parts.append(cleaned_context[:400])
+            else:
+                response_parts.append("Prioritize high-interest debt first. Consider the debt avalanche method: pay minimums on all debts, then put extra money toward the highest interest rate debt.")
+        
+        elif is_about_budget:
+            response_parts.append("Creating and sticking to a budget is essential.")
+            if all_context:
+                cleaned_context = clean_financial_advice(all_context)
+                if cleaned_context:
+                    response_parts.append(cleaned_context[:400])
+            else:
+                response_parts.append("Use the 50/30/20 rule: 50% for needs, 30% for wants, 20% for savings and debt repayment. Track your expenses for a month to see where your money goes.")
+        
+        else:
+            # Generic financial question - use context if available
+            if all_context:
+                cleaned_context = clean_financial_advice(all_context)
+                if cleaned_context and len(cleaned_context) > 50:
+                    response_parts.append(cleaned_context[:400])
+                else:
+                    response_parts.append("I understand your question. Let me provide some general financial guidance: diversify your investments, maintain an emergency fund, and invest for the long term. For more specific advice, could you provide more details about your situation?")
+            else:
+                response_parts.append("I'd be happy to help with your financial question. Could you provide more specific details? For example, are you asking about investing, saving, budgeting, or managing debt?")
+        
+        # Combine response parts
+        financial_advice_text = ' '.join(response_parts) if response_parts else 'Invest calmly and diversify.'
+        
+        # Clean the final advice
+        financial_advice_text = clean_financial_advice(financial_advice_text)
+        
+        # Debug: print what we generated
+        print(f"🔍 Generated personalized advice: {financial_advice_text[:200]}...")
         
         return financial_advice_text
 
@@ -394,7 +485,7 @@ def chat_voice():
 
     emotion = emotion_model.predict(message)
     personality = personality_model.predict(message, emotion)
-    save_to_db(user_id, message, emotion, personality)
+    save_to_db(user_id, message, emotion, personality, sender='user')
 
     # Check if message is greeting/casual or financial query
     is_casual = is_greeting_or_casual(message)
@@ -409,6 +500,9 @@ personality_type: {personality['type']}
 emotion: {emotion['emotion']}
 response: {response_text}
 """
+        
+        # Save bot response to database
+        save_to_db(user_id, response_text, sender='bot')
         
         # Generate audio for the friendly response
         print(f"🎤 Generating audio for casual message: {response_text[:100]}...")
@@ -447,12 +541,16 @@ emotion: {emotion['emotion']}
 financial_advice: {audio_text}
 """
 
+        # Save bot response to database (save the clean audio_text, not the full reply)
+        save_to_db(user_id, audio_text, sender='bot')
+
         # Generate audio for the cleaned financial advice (ONLY the advice content)
         print(f"🎤 FINAL audio text being sent to TTS: {audio_text[:200]}...")
         audio_reply = text_to_speech(audio_text)
 
     return jsonify({
         "reply": reply,
+        "response": reply,  # Also include 'response' for frontend compatibility
         "personality": personality["type"],
         "emotion": emotion["emotion"],
         "transcribed_message": message,
@@ -477,16 +575,21 @@ def serve_audio(filename):
     else:
         return jsonify({'error': 'Audio file not found'}), 404
 
-# ---------------- TEXT CHAT ----------------
+# ---------------- TEXT CHAT ----------------  
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.json
-    message = data["message"]
+    # Handle both 'message' and 'text' keys for compatibility
+    data = request.json or {}
+    message = data.get("message") or data.get("text", "")
     user_id = data.get("user_id", 1)
+    
+    # Validate message
+    if not message or not message.strip():
+        return jsonify({"error": "Message or text is required"}), 400
 
     emotion = emotion_model.predict(message)
     personality = personality_model.predict(message, emotion)
-    save_to_db(user_id, message, emotion, personality)
+    save_to_db(user_id, message, emotion, personality, sender='user')
 
     # Check if message is greeting/casual or financial query
     is_casual = is_greeting_or_casual(message)
@@ -501,6 +604,9 @@ personality_type: {personality['type']}
 emotion: {emotion['emotion']}
 response: {response_text}
 """
+        
+        # Save bot response to database
+        save_to_db(user_id, response_text, sender='bot')
         
         # Generate audio for the friendly response
         print(f"🎤 Generating audio for casual message: {response_text[:100]}...")
@@ -539,16 +645,49 @@ emotion: {emotion['emotion']}
 financial_advice: {audio_text}
 """
 
+        # Save bot response to database (save the clean audio_text, not the full reply)
+        save_to_db(user_id, audio_text, sender='bot')
+
         # Generate audio for the cleaned financial advice (ONLY the advice content)
         print(f"🎤 FINAL audio text being sent to TTS: {audio_text[:200]}...")
         audio_reply = text_to_speech(audio_text)
 
     return jsonify({
         "reply": reply,
+        "response": reply,  # Also include 'response' for frontend compatibility
         "personality": personality["type"],
         "emotion": emotion["emotion"],
         "audio_url": f"/audio/{os.path.basename(audio_reply)}"
     })
+
+# ---------------- CHAT HISTORY ----------------  
+@app.route("/chat/history/<user_id>", methods=["GET"])
+def get_history(user_id):
+    """
+    Get chat history for a specific user.
+    
+    Args:
+        user_id: User identifier
+        
+    Returns:
+        JSON: List of chat messages with metadata
+    """
+    try:
+        limit = request.args.get('limit', 50, type=int)
+        messages = get_chat_history(user_id, limit=limit)
+        
+        return jsonify({
+            "success": True,
+            "messages": messages,
+            "count": len(messages)
+        })
+    except Exception as e:
+        print(f"❌ Error retrieving chat history: {e}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "messages": []
+        }), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

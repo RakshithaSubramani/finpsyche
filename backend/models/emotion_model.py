@@ -84,8 +84,10 @@ class EmotionModel:
             'worried about', 'concerned about', 'struggling with'
         ]
         
-        # Fear indicators
-        fear_keywords = ['crash', 'lose', 'losing', 'terrified', 'scared', 'afraid', 'worried', 'panic']
+        # Fear indicators (including advanced financial terms)
+        fear_keywords = ['crash', 'lose', 'losing', 'terrified', 'scared', 'afraid', 'worried', 'panic',
+                        'market crash', 'stock crash', 'correction', 'bear market', 'volatility', 'downturn',
+                        'plunge', 'sell-off', 'market fear', 'vix', 'fear index']
         
         # Hesitation indicators
         hesitation_keywords = ['hesitant', 'unsure', 'not sure', 'maybe', 'doubt', 'uncertain']
@@ -93,8 +95,10 @@ class EmotionModel:
         # Overconfidence indicators (only if clearly positive)
         overconfidence_keywords = ['sure i\'ll', 'bet the farm', 'make a fortune', 'rich quick', 'guaranteed', 'can\'t lose', 'definitely will']
         
-        # Excitement indicators (only if clearly positive)
-        excitement_keywords = ['boom', 'exciting', 'amazing', 'pumped', 'thrilled', 'awesome']
+        # Excitement indicators (including advanced financial terms)
+        excitement_keywords = ['boom', 'exciting', 'amazing', 'pumped', 'thrilled', 'awesome',
+                              'bull market', 'rally', 'surge', 'gains', 'profits', 'breakout',
+                              'fintech', 'innovation', 'live market', 'technical analysis', 'trading']
         
         # Priority-based emotion detection - check stress/regret FIRST
         has_stress_indicator = any(indicator in text_lower for indicator in stress_indicators)

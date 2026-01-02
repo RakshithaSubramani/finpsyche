@@ -51,7 +51,16 @@ class PersonalityModel:
                 "I'm all in on meme stocks",
                 "Penny stocks can make me rich",
                 "Leverage trading is exciting",
-                "I chase high returns aggressively"
+                "I chase high returns aggressively",
+                "Day trading stocks is my passion",
+                "I use technical analysis for quick trades",
+                "Live market data helps me make fast decisions",
+                "Fintech platforms make trading so easy",
+                "I'm into algorithmic trading strategies",
+                "Market analysis shows great opportunities",
+                "I trade based on live market trends",
+                "Options and futures are exciting",
+                "I use fintech tools for real-time trading"
             ],
             'Risk-Averse': [
                 "Too risky, stick to savings.",
@@ -162,11 +171,17 @@ class PersonalityModel:
         """
         emotion_score = emotion.get('score', 0.5)
         
-        # Extract keyword features
-        risk_keywords = ['risky', 'gamble', 'crypto', 'yolo', 'all in', 'high risk']
-        safe_keywords = ['safe', 'cautious', 'fd', 'savings', 'scared', 'low risk']
-        impulsive_keywords = ['now', 'immediately', 'quick', 'fomo', 'impulse', 'buy now']
-        emotional_keywords = ['anxious', 'worried', 'stress', 'panic', 'fear', 'emotion', 'nervous']
+        # Extract keyword features (including advanced financial terms)
+        risk_keywords = ['risky', 'gamble', 'crypto', 'yolo', 'all in', 'high risk', 'stocks', 'trading',
+                        'options', 'futures', 'leverage', 'margin', 'day trading', 'swing trading',
+                        'penny stocks', 'meme stocks', 'volatility', 'speculation', 'fintech trading']
+        safe_keywords = ['safe', 'cautious', 'fd', 'savings', 'scared', 'low risk', 'bonds', 'fixed deposit',
+                        'blue chip', 'dividend', 'conservative', 'defensive', 'stable', 'guaranteed']
+        impulsive_keywords = ['now', 'immediately', 'quick', 'fomo', 'impulse', 'buy now', 'live market',
+                             'real-time', 'instant', 'rush', 'hurry', 'urgent trade', 'quick decision']
+        emotional_keywords = ['anxious', 'worried', 'stress', 'panic', 'fear', 'emotion', 'nervous',
+                             'market stress', 'trading anxiety', 'emotional trading', 'panic sell',
+                             'fear of missing out', 'fomo', 'market emotions']
         
         text_lower = text.lower()
         risk_kw = 1 if any(kw in text_lower for kw in risk_keywords) else 0

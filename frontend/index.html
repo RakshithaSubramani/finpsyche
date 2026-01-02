@@ -4,24 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinPsyche – Financial Personality Chatbot</title>
-
-    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<div class="animated-bg">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+</div>
 
 <div class="container">
 
     <!-- HEADER -->
     <header>
-        <h1>💰 FinPsyche</h1>
-        <p class="subtitle">AI-Powered Financial Personality Analyzer</p>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" stroke="url(#gradient)" stroke-width="2"/>
+                    <path d="M20 10v20M15 15l5-3 5 3M15 25l5 3 5-3" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#10b981"/>
+                            <stop offset="100%" stop-color="#3b82f6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1>FinPsyche</h1>
+                <p class="subtitle">AI-Powered Financial Personality Analyzer</p>
+            </div>
+        </div>
     </header>
+
+    <!-- HEADER ACTIONS -->
+    <div class="header-actions">
+        <button id="loadHistoryBtn" class="history-button" title="Load chat history">
+            📜 History
+        </button>
+        <button id="gameBtn" class="game-button" title="Financial Decision Game">
+            🎮 Game
+        </button>
+    </div>
+
+    <!-- HISTORY SIDEBAR -->
+    <div id="historySidebar" class="history-sidebar" style="display: none;">
+        <div class="sidebar-header">
+            <h2>Your chats</h2>
+            <button id="backBtn" class="back-button" title="Back to chat">
+                ← Back
+            </button>
+        </div>
+        <div id="historyList" class="history-list">
+            <!-- History items will be inserted here -->
+        </div>
+    </div>
+
+    <!-- GAME MODAL -->
+    <div id="gameModal" class="game-modal" style="display: none;">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>Financial Decision Simulator</h2>
+                <button id="closeGameBtn" class="close-button">×</button>
+            </div>
+            <div id="gameContent" class="game-content">
+                <!-- Game content will be inserted here -->
+            </div>
+        </div>
+    </div>
 
     <!-- PERSONALITY BADGE -->
     <div class="personality-badge" id="personalityBadge" style="display:none;">
-        <span class="badge-label">Detected Personality:</span>
-        <span class="badge-value" id="personalityValue"></span>
+        <div class="badge-icon">👤</div>
+        <div class="badge-content">
+            <span class="badge-label">Detected Personality</span>
+            <span class="badge-value" id="personalityValue"></span>
+        </div>
     </div>
 
     <!-- CHAT AREA -->
@@ -30,23 +89,39 @@
 
             <!-- Initial Bot Message -->
             <div class="message bot-message">
-                <div class="message-content">
-                    <p>
-                        Hello! 👋  
-                        You can type or use the mic to share your financial thoughts.
-                        I’ll analyze your emotion and risk personality and guide you.
-                    </p>
+                <div class="avatar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" fill="#10b981"/>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
                 </div>
-                <div class="message-time">Now</div>
+                <div class="message-bubble">
+                    <div class="message-content">
+                        <p>
+                            Hello! 👋  
+                            You can type or use the mic to share your financial thoughts.
+                            I'll analyze your emotion and risk personality and guide you.
+                        </p>
+                    </div>
+                    <div class="message-time">Now</div>
+                </div>
             </div>
 
         </div>
 
         <!-- TYPING INDICATOR -->
         <div class="typing-indicator" id="typingIndicator" style="display:none;">
-            <span></span>
-            <span></span>
-            <span></span>
+            <div class="avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#10b981"/>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="typing-bubble">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </div>
 
@@ -54,8 +129,11 @@
     <div class="input-container">
 
         <!-- MIC BUTTON -->
-        <button id="micButton" title="Record voice">
-            🎤
+        <button id="micButton" class="icon-button mic-button" title="Record voice">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="mic-icon">
+                <rect x="7" y="2" width="6" height="10" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M4 10c0 4 3 7 6 7m0 0c3 0 6-3 6-7m-6 7v3m-3 0h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
         </button>
 
         <!-- TEXT INPUT -->
@@ -67,20 +145,21 @@
         >
 
         <!-- SEND BUTTON -->
-        <button id="sendButton" onclick="sendMessage()">
-            ➤
+        <button id="sendButton" class="icon-button send-button" onclick="sendMessage()">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3 10l14-7-7 14-1-7-6-0z" fill="currentColor"/>
+            </svg>
         </button>
     </div>
 
     <!-- RECORDING INDICATOR -->
     <div id="recordingIndicator" class="recording-indicator" style="display:none;">
         <div class="recording-pulse"></div>
-        Recording… click mic again to stop
+        <span class="recording-text">Recording... click mic again to stop</span>
     </div>
 
 </div>
 
-<!-- JS -->
 <script src="script.js"></script>
 </body>
 </html>
