@@ -14,7 +14,50 @@
     <div class="gradient-orb orb-3"></div>
 </div>
 
-<div class="container">
+<!-- LANDING PAGE -->
+<div id="landingPage" class="landing-page">
+    <div class="landing-content">
+        <div class="landing-logo">
+            <svg width="80" height="80" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="18" stroke="url(#landingGradient)" stroke-width="2"/>
+                <path d="M20 10v20M15 15l5-3 5 3M15 25l5 3 5-3" stroke="url(#landingGradient)" stroke-width="2" stroke-linecap="round"/>
+                <defs>
+                    <linearGradient id="landingGradient" x1="0" y1="0" x2="40" y2="40">
+                        <stop offset="0%" stop-color="#10b981"/>
+                        <stop offset="100%" stop-color="#3b82f6"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h1 class="landing-title">FinPsyche</h1>
+        <p class="landing-subtitle">AI-Powered Financial Personality Analyzer</p>
+        <p class="landing-description">Understand your financial behavior and make better decisions</p>
+        
+        <div class="choice-buttons">
+            <button id="chooseChatbot" class="choice-button chatbot-choice">
+                <div class="choice-icon">💬</div>
+                <div class="choice-text">
+                    <h3>Chatbot</h3>
+                    <p>Get personalized financial advice</p>
+                </div>
+            </button>
+            <button id="chooseGames" class="choice-button games-choice">
+                <div class="choice-icon">🎮</div>
+                <div class="choice-text">
+                    <h3>Training Games</h3>
+                    <p>Improve your financial decision-making</p>
+                </div>
+            </button>
+        </div>
+        <div style="margin-top: 32px;">
+            <button id="downloadReportBtn" class="download-report-button">
+                📊 Download My Report
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="mainContainer" style="display: none;">
 
     <!-- HEADER -->
     <header>
@@ -40,11 +83,17 @@
 
     <!-- HEADER ACTIONS -->
     <div class="header-actions">
+        <button id="backToMainBtn" class="back-to-main-button" title="Back to main page">
+            🏠 Main
+        </button>
         <button id="loadHistoryBtn" class="history-button" title="Load chat history">
             📜 History
         </button>
         <button id="gameBtn" class="game-button" title="Financial Decision Game">
             🎮 Game
+        </button>
+        <button id="downloadReportBtnChat" class="download-report-button-small" title="Download Report">
+            📊 Report
         </button>
     </div>
 
@@ -65,7 +114,7 @@
     <div id="gameModal" class="game-modal" style="display: none;">
         <div class="game-container">
             <div class="game-header">
-                <h2>Financial Decision Simulator</h2>
+                <h2 id="gameTitle">Financial Training Games</h2>
                 <button id="closeGameBtn" class="close-button">×</button>
             </div>
             <div id="gameContent" class="game-content">
